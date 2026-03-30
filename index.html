@@ -1,0 +1,1273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<link rel="icon" href="favicon.ico">
+<link rel="shortcut icon" href="favicon.ico">
+<link rel="apple-touch-icon" href="Logo.png">
+<title>Atithi – Indian Vegetarian Cuisine | Ho Chi Minh City</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,400;1,600&family=Cinzel:wght@400;600;700&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+
+/* ─── RESET & BASE ─── */
+:root {
+  --maroon:      #822214;
+  --maroon-dark: #6a1b10;
+  --maroon-light:#9e2a1c;
+  --gold:        #C9973A;
+  --gold-light:  #e8b84b;
+  --cream:       #EBE0C4;
+  --cream-dark:  #ecdcb1;
+  --off-white:   #EBE0C4;
+  --text-dark:   #2A0A0A;
+  --text-mid:    #5C2A2A;
+}
+*, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+html { scroll-behavior:smooth; }
+body { background:var(--off-white); color:var(--text-dark); font-family:'Jost',sans-serif; overflow-x:hidden; }
+
+/* ─── NAVBAR ─── */
+#navbar {
+  position:fixed; top:0; left:0; right:0; z-index:1000;
+  display:flex; align-items:center; justify-content:space-between;
+  padding:0 4vw; height:72px;
+  background:rgba(235,224,196,0.97);
+  backdrop-filter:blur(16px);
+  border-bottom:1px solid rgba(130,34,20,0.15);
+  transition:box-shadow 0.3s;
+}
+#navbar.scrolled { box-shadow:0 4px 32px rgba(130,34,20,0.12); }
+.nav-logo { height:50px; width:auto; display:block; }
+.nav-links { display:flex; gap:2.2rem; list-style:none; }
+.nav-links a {
+  font-family:'Cinzel',serif; font-size:0.72rem; letter-spacing:0.12em;
+  color:var(--maroon); text-decoration:none; text-transform:uppercase;
+  position:relative; padding-bottom:4px; transition:color 0.2s;
+}
+.nav-links a::after {
+  content:''; position:absolute; bottom:0; left:0; right:0; height:1px;
+  background:var(--gold); transform:scaleX(0); transform-origin:right;
+  transition:transform 0.3s ease;
+}
+.nav-links a:hover { color:var(--gold); }
+.nav-links a:hover::after { transform:scaleX(1); transform-origin:left; }
+.nav-cta {
+  font-family:'Cinzel',serif; font-size:0.68rem; letter-spacing:0.12em;
+  background:var(--maroon); color:var(--cream);
+  padding:10px 22px; text-transform:uppercase; text-decoration:none;
+  transition:background 0.2s, transform 0.2s;
+}
+.nav-cta:hover { background:var(--maroon-dark); transform:translateY(-1px); }
+.hamburger { display:none; flex-direction:column; gap:5px; cursor:pointer; padding:6px; }
+.hamburger span { width:24px; height:2px; background:var(--maroon); transition:all 0.3s; }
+#mobile-menu {
+  display:none; position:fixed; inset:0; top:72px;
+  background:var(--cream); z-index:999;
+  flex-direction:column; align-items:center; justify-content:center; gap:2.5rem;
+}
+#mobile-menu.open { display:flex; }
+#mobile-menu a {
+  font-family:'Cinzel',serif; font-size:1rem; letter-spacing:0.18em;
+  color:var(--maroon); text-decoration:none; text-transform:uppercase;
+}
+
+/* ════════════════════════════════════════
+   HERO — FULL-SCREEN CINEMATIC SLIDER
+════════════════════════════════════════ */
+#hero {
+  position:relative;
+  width:100%; height:100vh; min-height:600px;
+  overflow:hidden;
+}
+
+/* ── Slide ── */
+.hs {
+  position:absolute; inset:0;
+  display:flex; align-items:center; justify-content:center;
+  z-index:0;
+}
+.hs.is-active { z-index:2; }
+.hs.is-prev   { z-index:1; }
+
+/* Background image with Ken Burns */
+.hs-bg {
+  position:absolute; inset:-4%;
+  background-size:cover;
+  background-position:center;
+  will-change:transform;
+}
+/* idle: slightly zoomed in */
+.hs-bg { transform:scale(1.08); transition:transform 7s ease; }
+.hs.is-active .hs-bg { transform:scale(1); }
+
+/* Dark gradient overlay — heavier at bottom for text */
+.hs-overlay {
+  position:absolute; inset:0;
+  background:
+    var(--cream);
+}
+
+/* ── Slide content box ── */
+.hs-body {
+  position:relative; z-index:3;
+  display:flex; flex-direction:column;
+  align-items:flex-start;
+  text-align:left;
+  max-width:740px;
+  width:100%;
+  padding:0 7vw;
+  margin-top:20px;
+}
+
+/* Per-element stagger — each child animated independently */
+.hs-body > * {
+  opacity:0;
+  transform:translateY(28px);
+  transition:none;
+}
+.hs.is-active .hs-body > *  { transition:opacity 0.75s ease, transform 0.75s ease; }
+.hs.is-active .hs-body > *  { opacity:1; transform:translateY(0); }
+
+/* Stagger delays — only when slide is active */
+.hs.is-active .hs-pre     { transition-delay:0.1s; }
+.hs.is-active .hs-name    { transition-delay:0.25s; }
+.hs.is-active .hs-rule    { transition-delay:0.42s; }
+.hs.is-active .hs-sub     { transition-delay:0.52s; }
+.hs.is-active .hs-desc    { transition-delay:0.64s; }
+.hs.is-active .hs-actions { transition-delay:0.78s; }
+.hs.is-active .hs-badge   { transition-delay:0.90s; }
+
+/* Pre-heading  e.g. ॥ श्री गणेशाय नमः ॥ */
+.hs-pre {
+  font-family:'Cormorant Garamond',serif;
+  font-style:italic; font-weight:300;
+  font-size:clamp(0.8rem,1.6vw,1rem);
+  color:var(--maroon);
+  letter-spacing:0.3em;
+  text-transform:uppercase;
+  margin-bottom:0.6rem;
+}
+
+/* Restaurant name block */
+.hs-name {
+  display:flex; flex-direction:column; gap:0;
+  line-height:1;
+  margin-bottom:0.4rem;
+}
+.hs-devanagari {
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(1.5rem,4vw,3.2rem);
+  font-weight:300; font-style:italic;
+  color:var(--maroon-light);
+  letter-spacing:0.08em;
+}
+.hs-english {
+  font-family:'Cinzel',serif;
+  font-size:clamp(3.2rem,8vw,7.5rem);
+  font-weight:700; color:var(--maroon);
+  letter-spacing:0.22em;
+  line-height:0.92;
+}
+.hs-cuisine-type {
+  font-family:'Jost',sans-serif;
+  font-size:clamp(0.58rem,1.2vw,0.78rem);
+  letter-spacing:0.42em;
+  color:var(--text-mid);
+  text-transform:uppercase;
+  margin-top:0.55rem;
+}
+
+/* Gold rule */
+.hs-rule {
+  display:flex; align-items:center; gap:12px;
+  width:260px; margin-bottom:0.2rem;
+}
+.hs-rule-line {
+  flex:1; height:1px;
+  background:linear-gradient(to right, rgba(201,151,58,0.8), transparent);
+}
+.hs-rule-gem { color:var(--gold-light); font-size:0.8rem; }
+
+/* Sub-heading e.g. "Family Indian Restaurant · Ho Chi Minh City" */
+.hs-sub {
+  font-family:'Cinzel',serif;
+  font-size:clamp(0.55rem,1.1vw,0.72rem);
+  letter-spacing:0.24em; color:var(--text-mid);
+  text-transform:uppercase;
+  margin-bottom:0.6rem;
+}
+
+/* Description */
+.hs-desc {
+  font-size:clamp(0.88rem,1.5vw,1.02rem);
+  color:var(--text-mid);
+  line-height:1.85; max-width:480px;
+  font-weight:300;
+  margin-bottom:1.4rem;
+}
+
+/* CTA buttons */
+.hs-actions {
+  display:flex; gap:1rem; flex-wrap:wrap;
+  margin-bottom:1.2rem;
+}
+.hs-btn-solid {
+  font-family:'Cinzel',serif; font-size:0.68rem; letter-spacing:0.14em;
+  text-transform:uppercase; text-decoration:none; white-space:nowrap;
+  padding:13px 30px; display:inline-block;
+  background:var(--maroon); color:var(--cream);
+  border:2px solid var(--maroon);
+  transition:background 0.28s, color 0.28s, border-color 0.28s, transform 0.2s;
+}
+.hs-btn-solid:hover { background:var(--maroon-dark); color:#fff; border-color:var(--maroon-dark); transform:translateY(-2px); }
+.hs-btn-ghost {
+  font-family:'Cinzel',serif; font-size:0.68rem; letter-spacing:0.14em;
+  text-transform:uppercase; text-decoration:none; white-space:nowrap;
+  padding:13px 30px; display:inline-block;
+  background:transparent; color:var(--maroon);
+  border:2px solid var(--maroon);
+  transition:background 0.28s, color 0.28s, transform 0.2s;
+}
+.hs-btn-ghost:hover { background:rgba(235,224,196,0.18); transform:translateY(-2px); }
+
+/* Veg badge */
+.hs-badge {
+  display:inline-flex; align-items:center; gap:7px;
+  background:rgba(255,255,255,0.93); border:2px solid #2d7a00;
+  padding:5px 14px;
+}
+.hs-badge-dot { width:9px; height:9px; border-radius:50%; background:#2d7a00; flex-shrink:0; }
+.hs-badge-txt { font-family:'Cinzel',serif; font-size:0.58rem; letter-spacing:0.1em; color:#2d7a00; }
+
+/* ── Slide number counter ── */
+.hs-counter {
+  position:absolute; right:5vw; bottom:42px; z-index:10;
+  font-family:'Cinzel',serif; font-size:0.62rem; letter-spacing:0.16em;
+  color:var(--text-mid);
+  display:flex; align-items:center; gap:8px;
+}
+.hs-counter-cur { font-size:1.4rem; color:var(--text-dark); font-weight:700; line-height:1; }
+.hs-counter-sep { width:30px; height:1px; background:var(--maroon); }
+
+/* ── Progress bar at top ── */
+.hs-progress {
+  position:absolute; top:0; left:0; width:100%; height:3px; z-index:10;
+  background:var(--maroon-dark);
+}
+.hs-progress-fill {
+  height:100%;
+  background:linear-gradient(to right, var(--maroon), var(--maroon-light));
+  width:0%;
+  transition:none;
+}
+.hs-progress-fill.running {
+  width:100%;
+  transition:width 5s linear;
+}
+
+/* ── Prev / Next arrows ── */
+.hs-arrow {
+  position:absolute; top:50%; transform:translateY(-50%);
+  z-index:10; width:48px; height:48px;
+  background:rgba(20,4,4,0.30); border:1px solid rgba(235,224,196,0.25);
+  color:rgba(235,224,196,0.85); cursor:pointer;
+  display:flex; align-items:center; justify-content:center;
+  transition:background 0.2s, color 0.2s;
+  backdrop-filter:blur(8px);
+  font-size:1.1rem;
+}
+.hs-arrow:hover { background:rgba(130,34,20,0.65); color:#fff; border-color:rgba(235,224,196,0.55); }
+.hs-arrow-prev { left:20px; }
+.hs-arrow-next { right:20px; }
+
+/* ── Dot pagination ── */
+.hs-dots {
+  position:absolute; bottom:34px; left:7vw; z-index:10;
+  display:flex; gap:10px; align-items:center;
+}
+.hs-dot {
+  width:6px; height:6px; border-radius:50%;
+  background:var(--gold);
+  cursor:pointer; transition:all 0.3s; padding:0; border:none;
+}
+.hs-dot.active {
+  width:24px; border-radius:3px;
+  background:var(--gold-light);
+}
+
+
+
+/* ════════════════════════════════════════
+   REST OF PAGE — ABOUT, CUISINES etc.
+════════════════════════════════════════ */
+
+
+
+.section-header { text-align:center; margin-bottom:3.5rem; }
+.section-tag {
+  font-family:'Cinzel',serif; font-size:0.68rem; letter-spacing:0.3em;
+  color:var(--maroon-light); text-transform:uppercase; display:block; margin-bottom:0.75rem;
+}
+.section-title {
+  font-family:'Cormorant Garamond',serif; font-weight:600;
+  font-size:clamp(2rem,4vw,3.2rem); color:var(--maroon-dark); line-height:1.15;
+}
+.section-title em { font-style:italic; color:var(--maroon-light); }
+.ornament { display:flex; align-items:center; gap:1rem; justify-content:center; margin-top:1.2rem; }
+.ornament::before,.ornament::after { content:''; width:70px; height:1px; background:linear-gradient(to right,transparent,var(--gold)); }
+.ornament::after { background:linear-gradient(to left,transparent,var(--gold)); }
+.ornament-dot { color:var(--gold); font-size:1.2rem; }
+
+/* ABOUT */
+#about { padding:8rem 6vw; background:var(--cream-dark); }
+.about-grid { display:grid; grid-template-columns:1fr 1fr; gap:5rem; align-items:start; max-width:1200px; margin:0 auto; }
+.about-visual { position:relative; }
+.about-img-main { width:100%; aspect-ratio:4/5; object-fit:cover; position:relative; z-index:1; }
+.about-img-frame { position:absolute; top:-16px; left:-16px; right:16px; bottom:16px; border:2px solid var(--gold); z-index:0; }
+.about-badge {
+  position:absolute; bottom:-20px; right:-20px; width:120px; height:120px;
+  background:var(--maroon); border-radius:50%;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  color:var(--cream); z-index:2; box-shadow:0 8px 32px rgba(130,34,20,0.3);
+}
+.about-badge-num { font-family:'Cormorant Garamond',serif; font-size:1.8rem; font-weight:700; line-height:1; }
+.about-badge-txt { font-family:'Cinzel',serif; font-size:0.5rem; letter-spacing:0.1em; text-transform:uppercase; text-align:center; margin-top:2px; }
+.about-text { display:flex; flex-direction:column; gap:0; }
+.about-text > p { font-size:0.97rem; line-height:1.88; color:var(--text-mid); font-weight:300; margin-bottom:1.1rem; }
+.jain-notice { margin:1.4rem 0 1.6rem; border-left:3px solid var(--gold); background:rgba(201,151,58,0.09); padding:1.1rem 1.3rem 1rem; border-radius:0 4px 4px 0; }
+.jain-notice-title { font-family:'Cinzel',serif; font-size:0.7rem; letter-spacing:0.16em; color:var(--maroon-dark); text-transform:uppercase; margin-bottom:0.5rem; display:flex; align-items:center; gap:7px; }
+.jain-notice-row { display:grid; grid-template-columns:1fr 1fr; gap:0.7rem 1.2rem; margin-top:0.55rem; }
+.jain-notice-col { display:flex; flex-direction:column; gap:0.25rem; }
+.jain-col-head { font-family:'Cinzel',serif; font-size:0.6rem; letter-spacing:0.14em; text-transform:uppercase; color:var(--maroon-light); margin-bottom:0.1rem; }
+.jain-notice-col p { font-size:0.86rem; color:var(--text-mid); line-height:1.65; font-weight:300; }
+.about-stats { display:grid; grid-template-columns:repeat(3,1fr); gap:1.5rem; margin-top:1.8rem; padding-top:2rem; border-top:1px solid rgba(130,34,20,0.12); }
+.stat-item { text-align:center; }
+.stat-num { font-family:'Cormorant Garamond',serif; font-size:2.5rem; font-weight:700; color:var(--maroon); line-height:1; }
+.stat-label { font-family:'Cinzel',serif; font-size:0.58rem; letter-spacing:0.15em; color:var(--text-mid); text-transform:uppercase; margin-top:4px; display:block; }
+
+/* CUISINES */
+#cuisines { padding:8rem 6vw; background:var(--cream); position:relative; }
+.cuisines-grid { display:grid; grid-template-columns:repeat(5,1fr); gap:1.5rem; max-width:1200px; margin:0 auto; }
+.cuisine-card { position:relative; overflow:hidden; cursor:pointer; aspect-ratio:3/4; }
+.cuisine-card img { width:100%; height:100%; object-fit:cover; transition:transform 0.6s cubic-bezier(0.25,0.46,0.45,0.94); }
+.cuisine-card:hover img { transform:scale(1.08); }
+.cuisine-overlay { position:absolute; inset:0; background:linear-gradient(to top,rgba(90,15,15,0.85) 0%,rgba(90,15,15,0.18) 50%,transparent 100%); }
+.cuisine-info { position:absolute; bottom:0; left:0; right:0; padding:1.5rem 1rem; text-align:center; }
+.cuisine-info h3 { font-family:'Cormorant Garamond',serif; font-size:1.2rem; font-weight:600; color:#fff; margin-bottom:4px; }
+.cuisine-info span { font-family:'Cinzel',serif; font-size:0.55rem; letter-spacing:0.2em; color:var(--gold-light); text-transform:uppercase; }
+
+/* HIGHLIGHTS */
+#highlights { padding:8rem 6vw; background:var(--maroon-dark); position:relative; overflow:hidden; }
+#highlights::before { content:''; position:absolute; inset:0; background:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E"); }
+.highlights-inner { position:relative; z-index:1; max-width:1200px; margin:0 auto; }
+#highlights .section-title { color:#fff; }
+#highlights .section-tag { color:var(--gold-light); }
+.highlights-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:2rem; margin-top:4rem; }
+.highlight-card { background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.1); padding:2.5rem 2rem; text-align:center; transition:background 0.3s,transform 0.3s; backdrop-filter:blur(4px); }
+.highlight-card:hover { background:rgba(255,255,255,0.1); transform:translateY(-4px); }
+.highlight-icon { font-size:2.5rem; margin-bottom:1rem; display:block; }
+.highlight-card h3 { font-family:'Cormorant Garamond',serif; font-size:1.5rem; font-weight:600; color:#fff; margin-bottom:0.75rem; }
+.highlight-card p { font-size:0.9rem; line-height:1.7; color:rgba(255,255,255,0.65); font-weight:300; }
+
+/* ===== PREMIUM GALLERY ===== */
+
+#gallery{
+  padding: 10rem 6vw 6rem;  /* TOP ↑ increased */
+  background: var(--off-white);
+}
+
+.gallery-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit, minmax(260px,1fr));
+  gap:20px;
+  max-width:1200px;
+  margin:auto;
+}
+
+.gm-item{
+  position:relative;
+  overflow:hidden;
+  border-radius:16px;
+  cursor:pointer;
+  aspect-ratio:4/5;
+  box-shadow:0 10px 30px rgba(0,0,0,0.1);
+}
+
+.gm-item img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  transition:transform 0.6s ease;
+}
+
+.gm-item:hover img{
+  transform:scale(1.1);
+}
+
+/* overlay */
+.gm-overlay{
+  position:absolute;
+  inset:0;
+  background:linear-gradient(to top, rgba(0,0,0,0.7), transparent);
+  opacity:0;
+  transition:0.3s;
+  display:flex;
+  align-items:flex-end;
+  padding:15px;
+}
+
+.gm-item:hover .gm-overlay{
+  opacity:1;
+}
+
+.gm-item.hidden{
+  display:none !important;
+}
+.gm-overlay-label{
+  color:#fff;
+  font-size:0.7rem;
+  letter-spacing:0.2em;
+  font-family:'Cinzel',serif;
+}
+
+/* zoom icon */
+.gm-zoom{
+  position:absolute;
+  top:10px;
+  right:10px;
+  width:34px;
+  height:34px;
+  background:#822214;
+  color:#fff;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  opacity:0;
+  transform:scale(0.7);
+  transition:0.3s;
+}
+
+.gm-item:hover .gm-zoom{
+  opacity:1;
+  transform:scale(1);
+}
+
+/* filter */
+.gallery-filters{
+  display:flex;
+  justify-content:center;
+  gap:10px;
+  margin-bottom:30px;
+}
+
+.gf-btn{
+  padding:8px 18px;
+  border:1px solid #822214;
+  background:transparent;
+  color:#822214;
+  cursor:pointer;
+}
+
+.gf-btn.active{
+  background:#822214;
+  color:#fff;
+}
+
+/* responsive */
+@media(max-width:768px){
+  .gallery-grid{
+    grid-template-columns:repeat(2,1fr);
+  }
+}
+
+@media(max-width:480px){
+  .gallery-grid{
+    grid-template-columns:1fr;
+  }
+}
+
+/* ── LIGHTBOX ── */
+#lb {
+  position:fixed; inset:0; z-index:9000;
+  background:rgba(10,3,3,0.94);
+  display:none; align-items:center; justify-content:center;
+  backdrop-filter:blur(8px);
+}
+#lb.open { display:flex; }
+#lb-img {
+  max-width:88vw; max-height:88vh;
+  object-fit:contain;
+  box-shadow:0 30px 80px rgba(0,0,0,0.5);
+  transition:opacity 0.3s;
+}
+#lb-close {
+  position:absolute; top:20px; right:24px;
+  font-family:'Cinzel',serif; font-size:1.2rem;
+  color:rgba(235,224,196,0.8); cursor:pointer; border:none; background:none;
+  width:40px; height:40px;
+  display:flex; align-items:center; justify-content:center;
+  transition:color 0.2s;
+}
+#lb-close:hover { color:#fff; }
+#lb-prev, #lb-next {
+  position:absolute; top:50%; transform:translateY(-50%);
+  width:48px; height:48px;
+  background:rgba(235,224,196,0.1); border:1px solid rgba(235,224,196,0.25);
+  color:rgba(235,224,196,0.85); cursor:pointer; font-size:1.1rem;
+  display:flex; align-items:center; justify-content:center;
+  transition:background 0.2s; backdrop-filter:blur(4px);
+}
+#lb-prev:hover, #lb-next:hover { background:rgba(130,34,20,0.6); color:#fff; }
+#lb-prev { left:16px; }
+#lb-next { right:16px; }
+#lb-caption {
+  position:absolute; bottom:20px; left:50%; transform:translateX(-50%);
+  font-family:'Cinzel',serif; font-size:0.58rem;
+  letter-spacing:0.2em; color:rgba(235,224,196,0.6);
+  text-transform:uppercase; white-space:nowrap;
+}
+#lb-counter {
+  position:absolute; top:22px; left:50%; transform:translateX(-50%);
+  font-family:'Cinzel',serif; font-size:0.58rem;
+  letter-spacing:0.2em; color:rgba(235,224,196,0.5);
+}
+
+/* CONTACT */
+#contact { padding:8rem 6vw; background:var(--cream-dark); }
+.contact-inner { max-width:1100px; margin:0 auto; display:grid; grid-template-columns:1fr 1fr; gap:5rem; align-items:start; }
+.contact-info { display:flex; flex-direction:column; gap:2rem; }
+.contact-block h4 { font-family:'Cinzel',serif; font-size:0.72rem; letter-spacing:0.2em; color:var(--maroon-dark); text-transform:uppercase; margin-bottom:0.5rem; }
+.contact-block p,.contact-block a { font-size:1rem; line-height:1.7; color:var(--text-mid); text-decoration:none; font-weight:300; }
+.contact-block a:hover { color:var(--maroon); }
+.contact-divider { width:40px; height:2px; background:var(--maroon-dark); margin-top:1rem; }
+.contact-map-placeholder { width:100%; min-height:340px; background:var(--cream); display:flex; flex-direction:column; align-items:center; justify-content:center; border:2px solid rgba(130,34,20,0.15); text-align:center; padding:2rem; }
+.contact-map-placeholder p { font-family:'Cormorant Garamond',serif; font-size:1.05rem; color:var(--maroon); margin-top:1rem; line-height:1.6; }
+.btn-map { display:inline-block; margin-top:1.5rem; background:var(--maroon); color:var(--cream); font-family:'Cinzel',serif; font-size:0.66rem; letter-spacing:0.14em; text-transform:uppercase; text-decoration:none; padding:11px 24px; border:2px solid var(--maroon); transition:all 0.3s; }
+.btn-map:hover { background:transparent; color:var(--maroon); }
+
+/* FOOTER */
+footer { background:var(--text-dark); padding:4rem 6vw 2rem; color:rgba(255,255,255,0.6); }
+.footer-top { display:grid; grid-template-columns:2fr 1fr 1fr; gap:4rem; padding-bottom:3rem; border-bottom:1px solid rgba(255,255,255,0.08); margin-bottom:2rem; }
+.footer-brand img { height:46px; margin-bottom:1rem; }
+.footer-brand p { font-size:0.88rem; line-height:1.7; max-width:280px; font-weight:300; }
+.footer-col h5 { font-family:'Cinzel',serif; font-size:0.65rem; letter-spacing:0.2em; color:var(--gold-light); text-transform:uppercase; margin-bottom:1.2rem; }
+.footer-col ul { list-style:none; display:flex; flex-direction:column; gap:0.5rem; }
+.footer-col ul a { color:rgba(255,255,255,0.55); text-decoration:none; font-size:0.88rem; transition:color 0.2s; }
+.footer-col ul a:hover { color:var(--gold-light); }
+.footer-bottom { display:flex; justify-content:space-between; align-items:center; font-size:0.78rem; }
+
+/* REVEAL */
+@keyframes fadeUp { from{opacity:0;transform:translateY(22px)} to{opacity:1;transform:translateY(0)} }
+.reveal { opacity:0; transform:translateY(30px); transition:opacity 0.7s ease,transform 0.7s ease; }
+.reveal.visible { opacity:1; transform:translateY(0); }
+
+/* ════════════════════════════════════════
+   RESPONSIVE
+════════════════════════════════════════ */
+@media(max-width:1200px){
+  .gallery-masonry { columns:3; }
+}
+@media(max-width:1024px){
+  .cuisines-grid{grid-template-columns:repeat(3,1fr)}
+  .highlights-grid{grid-template-columns:repeat(2,1fr)}
+  .gallery-masonry { columns:3 180px; }
+  .footer-top{grid-template-columns:1fr 1fr;gap:2.5rem}
+}
+@media(max-width:768px){
+  #navbar{height:64px;padding:0 5vw}
+  .nav-links,.nav-cta{display:none}
+  .hamburger{display:flex}
+  #mobile-menu{top:64px}
+
+  /* Hero mobile */
+  #hero{min-height:100svh}
+  .hs-body{padding:0 6vw;align-items:center;text-align:center;margin-top:0}
+  .hs-overlay{
+  background:
+    var(--cream);
+}
+  .hs-english{font-size:clamp(2.8rem,11vw,4.2rem);letter-spacing:0.15em}
+  .hs-devanagari{font-size:clamp(1.4rem,5vw,2.4rem)}
+  .hs-cuisine-type{font-size:0.62rem}
+  .hs-desc{max-width:100%;font-size:0.88rem}
+  .hs-rule{width:200px;margin-left:auto;margin-right:auto}
+  .hs-rule-line{background:linear-gradient(to right,transparent,rgba(201,151,58,0.7),transparent)}
+  .hs-actions{justify-content:center}
+  .hs-btn-solid,.hs-btn-ghost{padding:11px 22px;font-size:0.64rem}
+  .hs-dots{left:50%;transform:translateX(-50%)}
+  .hs-counter{display:none}
+  .hs-arrow{width:36px;height:36px;font-size:0.9rem}
+  .hs-arrow-prev{left:10px}
+  .hs-arrow-next{right:10px}
+
+  .about-grid{grid-template-columns:1fr;gap:3.5rem}
+  .about-img-frame{top:-12px;left:-12px;right:12px;bottom:12px}
+  .about-badge{width:100px;height:100px;bottom:-16px;right:-10px}
+  .about-badge-num{font-size:1.5rem}
+  .jain-notice-row{grid-template-columns:1fr}
+  .cuisines-grid{grid-template-columns:repeat(2,1fr);gap:1rem}
+  .highlights-grid{grid-template-columns:1fr;gap:1.2rem}
+  .highlight-card{padding:1.8rem 1.5rem}
+  .gallery-masonry { columns:2; }
+  .contact-inner{grid-template-columns:1fr;gap:2.5rem}
+  .footer-top{grid-template-columns:1fr;gap:2rem;padding-bottom:2rem}
+  .footer-brand p{max-width:100%}
+  .footer-bottom{flex-direction:column;gap:0.5rem;text-align:center}
+  #about,#cuisines,#highlights,#gallery,#contact{padding:5rem 5vw}
+}
+@media(max-width:480px){
+  #navbar{height:60px}
+  #mobile-menu{top:60px}
+  #hero{min-height:100dvh}
+  .hs-english{font-size:clamp(2.4rem,13vw,3.4rem);letter-spacing:0.1em}
+  .hs-devanagari{font-size:clamp(1.2rem,7vw,1.9rem)}
+  .hs-pre{font-size:0.7rem;letter-spacing:0.2em}
+  .hs-sub{font-size:0.54rem}
+  .hs-desc{font-size:0.83rem;line-height:1.7}
+  .hs-actions{flex-direction:column;align-items:center;width:100%;gap:0.75rem}
+  .hs-btn-solid,.hs-btn-ghost{width:100%;max-width:280px;text-align:center;padding:12px 0}
+  .about-stats{gap:1rem}
+  .stat-num{font-size:2rem}
+  .gallery-masonry { columns:2; column-gap:8px; }
+  .gm-item { margin-bottom:8px; }
+  .cuisines-grid{grid-template-columns:1fr 1fr}
+  #about,#cuisines,#highlights,#gallery,#contact{padding:4rem 4vw}
+}
+@media(max-width:360px){
+  .hs-english{font-size:clamp(2rem,14vw,2.8rem)}
+  .hs-btn-solid,.hs-btn-ghost{max-width:240px}
+}
+
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav id="navbar">
+  <a href="index.html"><img class="nav-logo" src="Logo.png" alt="Atithi"/></a>
+  <ul class="nav-links">
+    <li><a href="#about">Our Story</a></li>
+    <li><a href="#cuisines">Cuisine</a></li>
+    <li><a href="#gallery">Gallery</a></li>
+    <li><a href="#contact">Visit Us</a></li>
+  </ul>
+  <a href="menu.html" class="nav-cta">View Menu</a>
+  <div class="hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></div>
+</nav>
+<div id="mobile-menu">
+  <a href="#about"    onclick="toggleMenu()">Our Story</a>
+  <a href="#cuisines" onclick="toggleMenu()">Cuisine</a>
+  <a href="#gallery"  onclick="toggleMenu()">Gallery</a>
+  <a href="#contact"  onclick="toggleMenu()">Visit Us</a>
+  <a href="menu.html" onclick="toggleMenu()">View Menu</a>
+</div>
+
+<!-- ════ HERO ════ -->
+<section id="hero">
+
+  
+
+  <!-- Slide 1 -->
+  <div class="hs is-active" data-index="0">
+    
+    <div class="hs-overlay"></div>
+    <div class="hs-body">
+      <span class="hs-pre">॥ श्री गणेशाय नमः ॥</span>
+      <div class="hs-name">
+        <span class="hs-devanagari">अतिथि</span>
+        <span class="hs-english">ATITHI</span>
+        <span class="hs-cuisine-type">Indian Vegetarian Cuisine</span>
+      </div>
+      <div class="hs-rule"><div class="hs-rule-line"></div><span class="hs-rule-gem">✦</span></div>
+      <span class="hs-sub">Family Restaurant · Ho Chi Minh City</span>
+      <p class="hs-desc">Authentic flavors of India — Gujarati, Jain, North Indian, Rajasthani, South Indian, Swaminarayan &amp; Chinese <br> lovingly prepared in the heart of Vietnam.</p>
+      <div class="hs-actions">
+        <a href="menu.html" class="hs-btn-solid">Explore Our Menu</a>
+        <a href="#contact"  class="hs-btn-ghost">Find Us</a>
+      </div>
+      <div class="hs-badge"><span class="hs-badge-dot"></span><span class="hs-badge-txt">100% Pure Vegetarian</span></div>
+    </div>
+  </div>
+
+  <!-- Slide 2 -->
+  <div class="hs" data-index="1">
+    
+    <div class="hs-overlay"></div>
+    <div class="hs-body">
+      <span class="hs-pre">॥ अतिथि देवो भव ॥</span>
+      <div class="hs-name">
+        <span class="hs-devanagari">अतिथि</span>
+        <span class="hs-english">ATITHI</span>
+        <span class="hs-cuisine-type">Signature Thali Experience</span>
+      </div>
+      <div class="hs-rule"><div class="hs-rule-line"></div><span class="hs-rule-gem">✦</span></div>
+      <span class="hs-sub">Gujarati · Punjabi · Daal Baati Thali</span>
+      <p class="hs-desc">A complete Indian feast on one grand platter — chapati, sabji, dal, rice, papad, buttermilk and a sweet treat.</p>
+      <div class="hs-actions">
+        <a href="menu.html#thali" class="hs-btn-solid">See Our Thalis</a>
+        <a href="#about"          class="hs-btn-ghost">Our Story</a>
+      </div>
+      <div class="hs-badge"><span class="hs-badge-dot"></span><span class="hs-badge-txt">100% Pure Vegetarian</span></div>
+    </div>
+  </div>
+
+  <!-- Slide 3 -->
+  <div class="hs" data-index="2">
+    
+    <div class="hs-overlay"></div>
+    <div class="hs-body">
+      <span class="hs-pre">॥ जय श्री कृष्णा ॥</span>
+      <div class="hs-name">
+        <span class="hs-devanagari">अतिथि</span>
+        <span class="hs-english">ATITHI</span>
+        <span class="hs-cuisine-type">South Indian Delights</span>
+      </div>
+      <div class="hs-rule"><div class="hs-rule-line"></div><span class="hs-rule-gem">✦</span></div>
+      <span class="hs-sub">Dosa · Idli · Vada · Uttapam</span>
+      <p class="hs-desc">Crispy golden dosas, fluffy idlis and tangy sambar — the true taste of South India in Ho Chi Minh City.</p>
+      <div class="hs-actions">
+        <a href="menu.html#south" class="hs-btn-solid">South Indian Menu</a>
+        <a href="#contact"        class="hs-btn-ghost">Visit Us</a>
+      </div>
+      <div class="hs-badge"><span class="hs-badge-dot"></span><span class="hs-badge-txt">100% Pure Vegetarian</span></div>
+    </div>
+  </div>
+
+  <!-- Slide 4 -->
+  <div class="hs" data-index="3">
+    
+    <div class="hs-overlay"></div>
+    <div class="hs-body">
+      <span class="hs-pre">॥ सर्वे भवन्तु सुखिनः ॥</span>
+      <div class="hs-name">
+        <span class="hs-devanagari">अतिथि</span>
+        <span class="hs-english">ATITHI</span>
+        <span class="hs-cuisine-type">North Indian Curries</span>
+      </div>
+      <div class="hs-rule"><div class="hs-rule-line"></div><span class="hs-rule-gem">✦</span></div>
+      <span class="hs-sub">Paneer · Dal Makhani · Biryani</span>
+      <p class="hs-desc">Rich, creamy curries and aromatic biryanis from generations-old recipes — nothing fusion, nothing shortcut.</p>
+      <div class="hs-actions">
+        <a href="menu.html#paneer" class="hs-btn-solid">View Paneer Dishes</a>
+        <a href="#cuisines"        class="hs-btn-ghost">All Cuisines</a>
+      </div>
+      <div class="hs-badge"><span class="hs-badge-dot"></span><span class="hs-badge-txt">Jain Options Available</span></div>
+    </div>
+  </div>
+
+  
+
+  <!-- Scroll cue -->
+  <div class="hs-scroll">
+    <span class="hs-scroll-lbl">Scroll</span>
+    <div class="hs-scroll-line"></div>
+  </div>
+
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="about-grid">
+    <div class="about-visual reveal">
+      <div class="about-img-frame"></div>
+      <img class="about-img-main" src="img1.JPG" alt="Atithi restaurant"/>
+      <div class="about-badge"><span class="about-badge-num">200+</span><span class="about-badge-txt">Dishes</span></div>
+    </div>
+    <div class="about-text reveal">
+      <div class="section-header" style="text-align:left;margin-bottom:1.5rem;">
+        <span class="section-tag">Our Story</span>
+        <h2 class="section-title">A Taste of <em>India</em><br/>in Vietnam</h2>
+        <div class="ornament" style="justify-content:flex-start;">
+          <span class="ornament-dot">✦</span>
+          <div style="width:70px;height:1px;background:linear-gradient(to right,var(--gold),transparent);"></div>
+        </div>
+      </div>
+      <p>Atithi — meaning <em>'Guest'</em> in Sanskrit — was born from a deep reverence for Indian culinary tradition and the timeless philosophy of <em>Atithi Devo Bhava</em>: the guest is God.</p>
+      <p>Our kitchen brings together recipes passed down through generations — from the sweet tang of Gujarati dal to Rajasthani gravies, South Indian crêpes, and rich North Indian curries.</p>
+      <p>Every dish is prepared fresh daily using the finest ingredients, to honor both our heritage and our guests.</p>
+      <div class="jain-notice">
+        <div class="jain-notice-title"><span>🏺</span> Jain &amp; Non-Jain — Both Welcome</div>
+        <div class="jain-notice-row">
+          <div class="jain-notice-col">
+            <span class="jain-col-head">For All Guests</span>
+            <p>Our full menu of 200+ dishes is available for everyone with standard onion-garlic preparations.</p>
+          </div>
+          <div class="jain-notice-col">
+            <span class="jain-col-head">For Jain Guests</span>
+            <p>Any dish can be made <strong>without onion, garlic or root vegetables</strong> on request — same taste, zero compromise.</p>
+          </div>
+        </div>
+      </div>
+      <div class="about-stats">
+        <div class="stat-item"><span class="stat-num">200+</span><span class="stat-label">Menu Items</span></div>
+        <div class="stat-item"><span class="stat-num">5</span><span class="stat-label">Cuisines</span></div>
+        <div class="stat-item"><span class="stat-num">100%</span><span class="stat-label">Veg &amp; Fresh</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CUISINES -->
+<section id="cuisines">
+  <div class="section-header reveal">
+    <span class="section-tag">What We Serve</span>
+    <h2 class="section-title">Five Culinary <em>Traditions</em></h2>
+    <div class="ornament"><span class="ornament-dot">✦</span></div>
+  </div>
+  <div class="cuisines-grid reveal">
+    <div class="cuisine-card"><img src="gujarati-thali.jpg" alt="Gujarati"/><div class="cuisine-overlay"></div><div class="cuisine-info"><h3>Gujarati</h3><span>Sweet · Mild · Homely</span></div></div>
+    <div class="cuisine-card"><img src="https://images.unsplash.com/photo-1567188040759-fb8a883dc6d8?w=400&q=80" alt="Jain"/><div class="cuisine-overlay"></div><div class="cuisine-info"><h3>Jain</h3><span> No Onion · No Garlic · no root vegetables</span></div></div>
+    
+    <div class="cuisine-card"><img src="North-Indian.jpg" alt="North Indian"/><div class="cuisine-overlay"></div><div class="cuisine-info"><h3>North Indian</h3><span>Rich · Creamy · Aromatic</span></div></div>
+    <div class="cuisine-card"><img src="rajasthani.png" alt="Rajasthani"/><div class="cuisine-overlay"></div><div class="cuisine-info"><h3>Rajasthani</h3><span>Daal Baati · Royal Flavors</span></div></div>
+    <div class="cuisine-card"><img src="south-indian.jpg" alt="South Indian"/><div class="cuisine-overlay"></div><div class="cuisine-info"><h3>South Indian</h3><span>Dosa · Idli · Sambar</span></div></div>
+
+    <div class="cuisine-card">
+  <img src="swaminarayn.jpg" alt="Swaminarayan"/>
+  <div class="cuisine-overlay"></div>
+  <div class="cuisine-info">
+    <h3>Swaminarayan</h3>
+    <span>No Onion · No Garlic</span>
+  </div>
+</div>
+
+<div class="cuisine-card">
+  <img src="chinese.jpg" alt="Chinese"/>
+  <div class="cuisine-overlay"></div>
+  <div class="cuisine-info">
+    <h3>Chinese</h3>
+    <span>Indo-Chinese · Spicy · Flavorful</span>
+  </div>
+</div>
+  </div>
+</section>
+
+<!-- HIGHLIGHTS -->
+<section id="highlights">
+  <div class="highlights-inner">
+    <div class="section-header reveal">
+      <span class="section-tag">Why Atithi</span>
+      <h2 class="section-title" style="color:#fff;">The <em style="color:var(--gold-light);">Atithi</em> Promise</h2>
+      <div class="ornament"><span class="ornament-dot" style="color:var(--gold-light);">✦</span></div>
+    </div>
+    <div class="highlights-grid reveal">
+      <div class="highlight-card"><span class="highlight-icon">🌿</span><h3>100% Vegetarian</h3><p>Every item is pure vegetarian — our kitchen has never cooked meat and never will. A sacred promise.</p></div>
+      <div class="highlight-card"><span class="highlight-icon">🏺</span><h3>Jain &amp; Non-Jain Both</h3><p>We serve all guests. Jain dishes without onion, garlic or root vegetables on request — same great taste.</p></div>
+      <div class="highlight-card"><span class="highlight-icon">👨‍🍳</span><h3>Authentic Recipes</h3><p>Generations-old family recipes from across India — nothing is fusion, nothing is shortcut. Pure cooking.</p></div>
+      
+      <div class="highlight-card"><span class="highlight-icon">🍽️</span><h3>Thali Feasts</h3><p>Gujarati, Punjabi &amp; Daal Baati Thaalis — a complete Indian meal on one grand platter.</p></div>
+      <div class="highlight-card"><span class="highlight-icon">🌶️</span><h3>Customizable Spice</h3><p>From mild to fiery — we prepare every dish to your preferred spice level.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="gallery">
+  <div class="section-header reveal">
+    <span class="section-tag">From Our Kitchen & Restaurant</span>
+    <h2 class="section-title">A Feast for the <em>Eyes</em></h2>
+    <div class="ornament"><span class="ornament-dot">✦</span></div>
+  </div>
+
+  <!-- FILTER -->
+  <div class="gallery-filters reveal">
+    <button class="gf-btn active" data-filter="all">All</button>
+    <button class="gf-btn" data-filter="restaurant">Restaurant</button>
+    <button class="gf-btn" data-filter="city">City</button>
+  </div>
+
+  <!-- GRID -->
+  <div class="gallery-grid reveal" id="galleryMasonry">
+
+    <!-- ITEM -->
+    <div class="gm-item" data-cat="restaurant">
+      <img src="img2.JPG" alt="">
+      
+      <span class="gm-zoom">+</span>
+    </div>
+
+    <div class="gm-item" data-cat="restaurant">
+      <img src="img3.JPG" alt="">
+      
+      <span class="gm-zoom">+</span>
+    </div>
+
+    <div class="gm-item" data-cat="restaurant">
+      <img src="img4.JPG" alt="">
+      
+      <span class="gm-zoom">+</span>
+    </div>
+
+    <div class="gm-item" data-cat="restaurant">
+      <img src="img5.JPG" alt="">
+      
+      <span class="gm-zoom">+</span>
+    </div>
+
+    <div class="gm-item" data-cat="restaurant">
+      <img src="img6.JPG" alt="">
+      
+      <span class="gm-zoom">+</span>
+    </div>
+
+    <div class="gm-item" data-cat="restaurant">
+      <img src="img7.JPG" alt="">
+      
+      <span class="gm-zoom">+</span>
+    </div>
+
+    <div class="gm-item" data-cat="restaurant">
+      <img src="img8.JPG" alt="">
+      
+      <span class="gm-zoom">+</span>
+    </div>
+
+    <div class="gm-item" data-cat="restaurant">
+      <img src="img9.JPG" alt="">
+      
+      <span class="gm-zoom">+</span>
+    </div>
+
+    <div class="gm-item" data-cat="restaurant">
+      <img src="img10.JPG" alt="">
+      
+      <span class="gm-zoom">+</span>
+    </div>
+
+    <div class="gm-item" data-cat="restaurant">
+      <img src="img11.JPG" alt="">
+      
+      <span class="gm-zoom">+</span>
+    </div>
+
+    <div class="gm-item" data-cat="restaurant">
+      <img src="img12.JPG" alt="">
+      
+      <span class="gm-zoom">+</span>
+    </div>
+
+    <div class="gm-item" data-cat="restaurant">
+      <img src="img13.JPG" alt="">
+      
+      <span class="gm-zoom">+</span>
+    </div>
+
+    <!-- CITY -->
+    <div class="gm-item" data-cat="city">
+      <img src="city1.jpg" alt="">
+      
+      <span class="gm-zoom">+</span>
+    </div>
+
+    <div class="gm-item" data-cat="city">
+      <img src="city2.jpg" alt="">
+      
+      <span class="gm-zoom">+</span>
+    </div>
+
+    <div class="gm-item" data-cat="city">
+      <img src="city3.jpg" alt="">
+      
+      <span class="gm-zoom">+</span>
+    </div>
+
+    <div class="gm-item" data-cat="city">
+      <img src="city4.jpg" alt="">
+      
+      <span class="gm-zoom">+</span>
+    </div>
+
+    <div class="gm-item" data-cat="city">
+      <img src="city5.jpg" alt="">
+      
+      <span class="gm-zoom">+</span>
+    </div>
+
+  </div>
+</section>
+
+<!-- LIGHTBOX -->
+<div id="lb" role="dialog" aria-modal="true" aria-label="Image viewer">
+  <button id="lb-close" aria-label="Close">✕</button>
+  <button id="lb-prev" aria-label="Previous">&#8592;</button>
+  <img id="lb-img" src="" alt="Gallery image"/>
+  <button id="lb-next" aria-label="Next">&#8594;</button>
+  <span id="lb-caption"></span>
+  <span id="lb-counter"></span>
+</div>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="section-header reveal">
+    <span class="section-tag">Visit Us</span>
+    <h2 class="section-title">Come, <em>Be Our Guest</em></h2>
+    <div class="ornament"><span class="ornament-dot">✦</span></div>
+  </div>
+  <div class="contact-inner">
+    <div class="contact-info reveal">
+      <div class="contact-block"><h4>📍 Address</h4><p>246 Ly Tu Trong, Ben Thanh Ward<br/>District 1, Ho Chi Minh City,<br/>Vietnam</p><div class="contact-divider"></div></div>
+      <div class="contact-block"><h4>📞 Contact</h4><p><strong>Dipesh Patel</strong><br/><a href="tel:+84703534642">+84 703 534 642</a></p><p style="margin-top:0.5rem;"></p><p><strong>D.K. Patel</strong><br/><a href="tel:+84908869931">+84 908 869 931</a></p><div class="contact-divider"></div></div>
+      <div class="contact-block"><h4>🕐 Hours</h4><p>Open Daily<br/>8:00 AM – 12:00 AM</p><div class="contact-divider"></div></div>
+      <div class="contact-block"><h4>ℹ️ Info</h4><p>Jain options on request<br/>Family-friendly dining</p></div>
+    </div>
+      
+    <div class="reveal">
+  <div class="contact-map-placeholder" id="mapBox">
+    <span style="font-size:3rem;">📍</span>
+
+    <p>
+      <strong style="font-family:Cinzel,serif;color:var(--maroon-dark);font-size:1rem;">
+        Atithi – Indian Vegetarian Cuisine
+      </strong><br/>
+      246 Ly Tu Trong, Ben Thanh Ward<br/>
+      District 1, Ho Chi Minh City, Vietnam
+    </p>
+
+    <a href="https://maps.app.goo.gl/2Wh1EB5xP8oq5wVm6" target="_blank" class="btn-map">
+      Open in Google Maps
+    </a>
+  </div>
+</div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-top">
+    <div class="footer-brand">
+      
+      <p>Authentic Indian vegetarian cuisine in the heart of Ho Chi Minh City. Gujarati, Jain, Swaminarayan, Chinese, South, North &amp; Rajasthani flavors with love.</p>
+    </div>
+    <div class="footer-col">
+      <h5>Quick Links</h5>
+      <ul><li><a href="#about">Our Story</a></li><li><a href="#cuisines">Our Cuisine</a></li><li><a href="menu.html">Full Menu</a></li><li><a href="#contact">Visit Us</a></li></ul>
+    </div>
+    <div class="footer-col">
+      <h5>Cuisines</h5>
+      <ul><li><a href="menu.html">Gujarati Food</a></li><li><a href="menu.html">Jain Food</a></li><li><a href="menu.html">South Indian Food</a></li><li><a href="menu.html">North Indian Food</a></li><li><a href="menu.html">Rajasthani Food</a></li><li><a href="menu.html">Swaminarayan Food</a></li><li><a href="menu.html">Chinese Food</a></li></ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2025 Atithi – Indian Vegetarian Cuisine. All rights reserved.</span>
+    <span style="color:var(--gold-light);">॥ अतिथि देवो भव ॥</span>
+  </div>
+</footer>
+
+<script>
+/* ── Navbar ── */
+window.addEventListener('scroll',()=>{ document.getElementById('navbar').classList.toggle('scrolled',window.scrollY>50); });
+function toggleMenu(){ document.getElementById('mobile-menu').classList.toggle('open'); }
+
+/* ════════════════════════════════════
+   GALLERY — FILTER + LIGHTBOX
+════════════════════════════════════ */
+(function(){
+
+  /* ── Filter tabs ── */
+  const filterBtns = document.querySelectorAll('.gf-btn');
+  const items      = Array.from(document.querySelectorAll('.gm-item'));
+
+  filterBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      filterBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const cat = btn.dataset.filter;
+      items.forEach(item => {
+        if (cat === 'all' || item.dataset.cat === cat) {
+          item.classList.remove('hidden');
+        } else {
+          item.classList.add('hidden');
+        }
+      });
+    });
+  });
+
+  /* ── Lightbox ── */
+  const lb        = document.getElementById('lb');
+  const lbImg     = document.getElementById('lb-img');
+  const lbCaption = document.getElementById('lb-caption');
+  const lbCounter = document.getElementById('lb-counter');
+  let lbItems = []; // visible items
+  let lbCur   = 0;
+
+  function openLb(item) {
+    lbItems = items.filter(i => !i.classList.contains('hidden'));
+    lbCur   = lbItems.indexOf(item);
+    showLb(lbCur);
+    lb.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function showLb(idx) {
+    lbCur = ((idx % lbItems.length) + lbItems.length) % lbItems.length;
+    const img = lbItems[lbCur].querySelector('img');
+    lbImg.style.opacity = '0';
+    setTimeout(() => {
+      lbImg.src          = img.src;
+      lbImg.alt          = img.alt;
+      lbCaption.textContent = lbItems[lbCur].querySelector('.gm-overlay-label')?.textContent || '';
+      lbCounter.textContent = (lbCur + 1) + ' / ' + lbItems.length;
+      lbImg.style.opacity = '1';
+    }, 150);
+  }
+
+  function closeLb() {
+    lb.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  items.forEach(item => {
+    item.addEventListener('click', () => openLb(item));
+  });
+
+  document.getElementById('lb-close').addEventListener('click', closeLb);
+  document.getElementById('lb-prev').addEventListener('click', () => showLb(lbCur - 1));
+  document.getElementById('lb-next').addEventListener('click', () => showLb(lbCur + 1));
+
+  lb.addEventListener('click', e => { if (e.target === lb) closeLb(); });
+
+  document.addEventListener('keydown', e => {
+    if (!lb.classList.contains('open')) return;
+    if (e.key === 'Escape')     closeLb();
+    if (e.key === 'ArrowLeft')  showLb(lbCur - 1);
+    if (e.key === 'ArrowRight') showLb(lbCur + 1);
+  });
+
+  /* Lightbox swipe */
+  let ltx = 0;
+  lb.addEventListener('touchstart', e => { ltx = e.changedTouches[0].clientX; }, { passive:true });
+  lb.addEventListener('touchend',   e => {
+    const d = ltx - e.changedTouches[0].clientX;
+    if (Math.abs(d) > 40) showLb(lbCur + (d > 0 ? 1 : -1));
+  });
+
+})();
+const ro = new IntersectionObserver((entries)=>{
+  entries.forEach((e,i)=>{ if(e.isIntersecting){ e.target.style.transitionDelay=(i%3)*0.1+'s'; e.target.classList.add('visible'); } });
+},{threshold:0.1});
+document.querySelectorAll('.reveal').forEach(el=>ro.observe(el));
+
+/* ════════════════════════════════════
+   HERO SLIDER — clean, staggered
+════════════════════════════════════ */
+(function(){
+  const slides   = Array.from(document.querySelectorAll('.hs'));
+  const pf       = document.getElementById('hsPF');
+  const dotsWrap = document.getElementById('hsDots');
+  const curNum   = document.getElementById('hsCurNum');
+  const N        = slides.length;
+  const DURATION = 5200; // ms per slide
+  let cur = 0, timer = null, running = false;
+
+  /* Build dots */
+  slides.forEach((_,i)=>{
+    const d = document.createElement('button');
+    d.className = 'hs-dot'+(i===0?' active':'');
+    d.setAttribute('aria-label','Slide '+(i+1));
+    d.addEventListener('click',()=>go(i));
+    dotsWrap.appendChild(d);
+  });
+  const dots = dotsWrap.querySelectorAll('.hs-dot');
+  document.getElementById('hsTotalNum').textContent = String(N).padStart(2,'0');
+
+  /* Animate content items in with stagger */
+  function animateIn(slide){
+    const items = slide.querySelectorAll('.hs-body > *');
+    items.forEach(el=>{
+      el.style.transition = 'none';
+      el.style.opacity    = '0';
+      el.style.transform  = 'translateY(28px)';
+    });
+    /* force reflow then stagger */
+    void slide.offsetHeight;
+    items.forEach((el,i)=>{
+      setTimeout(()=>{
+        el.style.transition = 'opacity 0.7s ease, transform 0.7s ease';
+        el.style.opacity    = '1';
+        el.style.transform  = 'translateY(0)';
+      }, 100 + i * 140);
+    });
+  }
+
+  function animateOut(slide){
+    const items = slide.querySelectorAll('.hs-body > *');
+    items.forEach(el=>{
+      el.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
+      el.style.opacity    = '0';
+      el.style.transform  = 'translateY(-16px)';
+    });
+  }
+
+  function startProgress(){
+    pf.style.transition = 'none';
+    pf.style.width = '0%';
+    void pf.offsetHeight;
+    pf.style.transition = 'width '+DURATION+'ms linear';
+    pf.style.width = '100%';
+  }
+
+  function go(idx){
+    if(idx === cur) return;
+    const prev = cur;
+    cur = ((idx % N) + N) % N;
+
+    /* Animate out old */
+    animateOut(slides[prev]);
+    slides[prev].classList.remove('is-active');
+    slides[prev].classList.add('is-prev');
+    setTimeout(()=>slides[prev].classList.remove('is-prev'), 1200);
+
+    /* Activate new */
+    slides[cur].classList.add('is-active');
+    dots[prev].classList.remove('active');
+    dots[cur].classList.add('active');
+    curNum.textContent = String(cur+1).padStart(2,'0');
+
+    /* Stagger content in */
+    animateIn(slides[cur]);
+    startProgress();
+    resetTimer();
+  }
+
+  function resetTimer(){
+    clearTimeout(timer);
+    timer = setTimeout(()=>go(cur+1), DURATION);
+  }
+
+  /* Arrow buttons */
+  document.getElementById('hsPrev').addEventListener('click',()=>go(cur-1));
+  document.getElementById('hsNext').addEventListener('click',()=>go(cur+1));
+
+  /* Touch swipe */
+  let tx=0;
+  const hero = document.getElementById('hero');
+  hero.addEventListener('touchstart',e=>{tx=e.changedTouches[0].clientX;},{passive:true});
+  hero.addEventListener('touchend',e=>{
+    const d=tx-e.changedTouches[0].clientX;
+    if(Math.abs(d)>50) go(cur+(d>0?1:-1));
+  });
+
+  /* Pause on hover */
+  hero.addEventListener('mouseenter',()=>{ clearTimeout(timer); pf.style.animationPlayState='paused'; });
+  hero.addEventListener('mouseleave',resetTimer);
+
+  /* Init first slide */
+  animateIn(slides[0]);
+  startProgress();
+  resetTimer();
+})();
+
+
+</script>
+<script id="map_click_js">
+document.getElementById("mapBox").addEventListener("click", function(e) {
+  // Prevent double trigger when clicking button
+  if (e.target.tagName !== "A") {
+    window.open("https://maps.app.goo.gl/2Wh1EB5xP8oq5wVm6", "_blank");
+  }
+});
+</script>
+</body>
+</html>
